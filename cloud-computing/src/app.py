@@ -4,6 +4,13 @@ import sys
 
 from pyfiglet import Figlet
 
+def handle_env():
+    env = os.environ
+    worker_env = "WORKER ENVIRONMENT:\n"
+    for key in env :
+        worker_env += key + ": " + os.getenv(key, '') + "\n" 
+    return worker_env
+
 
 def do_some_computation():
     """
@@ -89,7 +96,6 @@ def handle_requester_secrets():
             iexec_requester_secrets += f'\nRequester secret {idx}: {iexec_requester_secret}'
     return iexec_requester_secrets
 
-
 def write_stderr():
     """
     This function writes some text to stderr.
@@ -121,6 +127,8 @@ def save_result(text):
 
 
 if __name__ == '__main__':
+    worker_env = handle_env()
+    print(worker_env)
     computation_text = do_some_computation()
     print(computation_text)
     dataset_text = handle_dataset()
@@ -132,7 +140,8 @@ if __name__ == '__main__':
     requester_secrets_text = handle_requester_secrets()
     print(requester_secrets_text)
     write_stderr()
-    result = f'{computation_text}\n' \
+    result = f'{worker_env}\n' \
+             f'{computation_text}\n' \
              f'{dataset_text}\n' \
              f'{input_files_text}\n' \
              f'{app_developer_secrets_text}\n' \
